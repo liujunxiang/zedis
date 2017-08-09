@@ -1,2 +1,4 @@
 # redis-proxy
-一个基于redis的代理服务器，支持分布式1
+Codis is a proxy based high performance Redis cluster solution written in C++. 
+
+
