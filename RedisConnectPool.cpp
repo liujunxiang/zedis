@@ -1,4 +1,4 @@
-#include "RedisConnectPolol.h"
+#include "RedisConnectPool.h"
 BEGIN_NAMESPACE
 CONNECTPOOL::ConnectPool::ConnectPool()
 {
