@@ -3,13 +3,13 @@ CFLAGS := -g -Wall
 TARGET := ReidsProxy
 SRCS := $(wildcard *.cpp)
 OBJS := $(patsubst %cpp,%o,$(SRCS))
-LIB=
+LIB=-lhiredis
+LIBPATH=-L./lib
 INCLUDE=-I./
 all:$(TARGET)
 $(OBJS):$(SRCS)
-	$(CC) $(CFLAGS) -c  $^  $(LIB) $(INCLUDE)
+	$(CC) $(CFLAGS) -c  $^   $(INCLUDE)
 $(TARGET):$(OBJS)
-	#ar -rc $@ $^
-	$(CC)  -o $@ $^
+	$(CC)  -o $@ $^ $(LIB) $(LIBPATH)
 clean:
 	rm -rf $(TARGET) *.o

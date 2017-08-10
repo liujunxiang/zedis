@@ -51,8 +51,9 @@ public:
 public:
 	AutoPtrContainer()
 	{
-
+			
 	}
+
 	~AutoPtrContainer()
 	{
 		std::vector<P_OBJECT> it;

@@ -19,17 +19,20 @@
 #include <error.h>
 #include <errno.h>
 #include <stdio.h>
+
 using namespace std;
 
 int main() {
-    CONNECTPOOL::ConnectPool *pool=new CONNECTPOOL::ConnectPool() ; 
+	
+    CONNECTPOOL::ConnectPool *pool=CONNECTPOOL::ConnectPool::Instance() ;  
+    #if 0
 	Acceptor oAcceptor( "127.0.0.1" ,3456 ) ;
-
     while (1)
     {
     	REACTOR_MANAGER_INSTANCE.RegistEvent(&oAcceptor, e_READEVENT);
     	REACTOR_MANAGER_INSTANCE.HandleEvent();
     }
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+	#endif
 	return 0;
 }
