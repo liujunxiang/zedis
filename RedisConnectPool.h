@@ -19,6 +19,13 @@ typedef struct __config
 {
     char ip[16] ;
     unsigned int port ; 
+	__config( const char * ip , unsigned int port  )
+	{
+		memset(this->ip,0x00 , sizeof( this->ip ) ) ;
+		strcpy( this->ip , ip ) ;
+		this->port = port ; 
+        
+	}
 }__attribute__((packed)) config;
 
 typedef struct __node__
@@ -36,6 +43,7 @@ typedef struct __node__
         if( c->err )
         {
             status=0 ;
+			std::cout << __FILE__ << ":" << __func__ << ":" << c->errstr  << std::endl ; 
         }
     }
     ~__node__()
@@ -75,6 +83,11 @@ typedef struct __node_group__
             delete slave ; 
         }
     }
+    int set( const char * command )
+    {
+        struct __node__ *_p = (master->status)?(master):( (slave->status)?(slave):(NULL ) ) ;  
+        return (redisCommand(_p->c, command) )?(0):(-1) ; 
+    }
 }_node_group_ ,*p_node_group_;
 
 typedef struct __list_node__
@@ -103,7 +116,7 @@ public:
 public:
 	void AddNode(config* master , int groupid  , config* slave=NULL ) ;
 	int size() const  ; 
-    int ExcuteCommand( char * data , char ** response , int(* HASH)(char * ) = NULL ) ;
+    int ExcuteCommand( char * data , char ** response , unsigned int(* HASH)(char * ) =NULL ) ;
 private:
     int WakeUp(int msgid  ) ; 
 private:

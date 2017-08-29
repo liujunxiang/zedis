@@ -1,7 +1,6 @@
 #include "RedisConnectPool.h"
 
 BEGIN_NAMESPACE
-
 unsigned int SDBMHash(char *str)
 {
     unsigned int hash = 0;
@@ -194,13 +193,50 @@ int CONNECTPOOL::ConnectPool::WakeUp(int msgid  )
 {
     return 0 ; 
 }
-
-int CONNECTPOOL::ConnectPool::ExcuteCommand( char * data , char ** response , int(* HASH)(char * ) ) 
+static inline int __get_num(   char * data )
+{
+    #if 1
+    char *pwalk = data ; 
+    int len = 0 ; 
+    while( *pwalk !='\r' )
+    {
+        len = (len*10)+(*pwalk - '0');  
+        ++pwalk ; 
+    }
+    return len ;    
+    #endif 
+}
+int CONNECTPOOL::ConnectPool::ExcuteCommand( char * data , char ** response , unsigned int(* HASH)(char * ) ) 
 {
 	if( HASH == NULL  )
 	{
-		HASH = PJWHash
+		HASH = PJWHash ;
 	}
+	char *pwalk = data ; 
+	char *pHead = pwalk ; 
+    
+    typedef int( *FUN )( char *) ; 
+    FUN convert = __get_num ; 
+	pwalk++ ;
+	int componments= (*convert)( pwalk ) ; 
+    switch(componments )
+    {
+        case 1:
+        break;
+        case 2:
+        
+        break ;
+        case 3:
+        break;
+        default:
+        return -1 ; 
+    }
+    
+    
+	
+	#if __DEBUG__
+		printf( "data=%s\n" ,data) ;
+	#endif 
     return  0 ; 
 }
 END_NAMESPACE
