@@ -256,8 +256,9 @@ void CONNECTPOOL::ConnectPool::info( char *out )
 {
     p__list_node__ p = this->m_p  ; 
     char ch[16384]={0} ; 
-    for( ; p ; p=p->next )
+    for( ; p->next ; p=p->next )
     {
+        printf("gid=%d\n" ,p->g->id ) ; 
         char buf[ 4096] = {0 } ; 
         char *_walk= buf ; 
         char *head=_walk  ;
@@ -329,6 +330,7 @@ int CONNECTPOOL::ConnectPool::ExcuteCommand( char * data , char * response , uns
                 return  0 ; 
             }
             
+             sprintf( response ,  "-ERR:no support command[%s]\r\n" ,out  ) ;
             return -1; 
         }
         break;
