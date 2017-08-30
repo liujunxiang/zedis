@@ -1,6 +1,6 @@
 CC := g++
 CFLAGS := -g -Wall -DDEBUG
-TARGET := ReidsProxy
+TARGET := proxy
 SRCS := $(wildcard *.cpp)
 OBJS := $(patsubst %cpp,%o,$(SRCS))
 LIB=-lhiredis
