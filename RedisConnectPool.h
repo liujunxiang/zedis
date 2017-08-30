@@ -43,14 +43,60 @@ typedef struct __node__
         if( c->err )
         {
             status=0 ;
-			std::cout << __FILE__ << ":" << __func__ << ":" << c->errstr  << std::endl ; 
+            printf(DEBUG_FORMAT" %s:%d connect failed ,error[%s]!!!\n" , DEBUG_VALIST  ,this->ip , this->port   , c->errstr  ) ; 
         }
     }
     ~__node__()
     {
         if( status)
         {
+            #if DEBUG
+                printf(DEBUG_FORMAT" %s:%d recyle!!!\n" , DEBUG_VALIST  ,this->ip , this->port  ) ;
+            #endif 
             redisFree( c ) ; 
+        }
+    }
+    int set( char * command ) 
+    {
+         #if DEBUG
+            printf(DEBUG_FORMAT" %s:%d command[%s]!!!\n" , DEBUG_VALIST  ,this->ip , this->port , command   ) ;
+         #endif 
+        redisReply* r = (redisReply*)redisCommand(c, command); 
+        if(!r)
+        {
+            return -1 ; 
+        }
+        freeReplyObject(r); 
+        return 0;
+    }
+    
+    int get( char * command  ,char *response ) 
+    {
+         #if DEBUG
+            printf(DEBUG_FORMAT" %s:%d command[%s]!!!\n" , DEBUG_VALIST  ,this->ip , this->port , command   ) ;
+         #endif 
+        redisReply* r = (redisReply*)redisCommand(c, command); 
+        if ( r->type == REDIS_REPLY_NIL)
+        {
+            strcpy(response ,  "$-1\r\n") ; 
+        }
+        else
+        {
+            sprintf(response , "$%d\r\n%s\r\n" , (int)strlen( r->str ) ,  r->str ) ; 
+        }
+        freeReplyObject(r); 
+        return 0;
+    }
+    
+    
+    void info( char * p )
+    {
+        
+        if( status )
+        {
+            redisReply* r = (redisReply*)redisCommand(c, "info");
+            strcpy( p , r->str ) ; 
+            freeReplyObject(r);  
         }
     }
 }__attribute__((packed)) _node_ ,*p__node_;
@@ -64,13 +110,19 @@ typedef struct __node_group__
     ,slave(NULL)\
     ,id(0)
     {
-        
     }
     __node_group__(struct __node__* l ,struct __node__* r ,unsigned short _id ):master( l)\
     ,slave(r)\
     ,id(_id)
     {
-        
+        #if DEBUG
+            printf(DEBUG_FORMAT" groupid[%d] created!!!with detail{[master=%s:%d] [slave:%s,%d]}\n" , \
+            DEBUG_VALIST ,this->id\
+            ,this->master->ip \
+            ,this->master->port \
+            ,this->slave->ip \
+            ,this->slave->port) ; 
+        #endif
     }  
     ~__node_group__()
     {
@@ -83,10 +135,9 @@ typedef struct __node_group__
             delete slave ; 
         }
     }
-    int set( const char * command )
+    struct __node__*  active_node()
     {
-        struct __node__ *_p = (master->status)?(master):( (slave->status)?(slave):(NULL ) ) ;  
-        return (redisCommand(_p->c, command) )?(0):(-1) ; 
+        return ( this->master->status )?( this->master ):( this->slave) ; 
     }
 }_node_group_ ,*p_node_group_;
 
@@ -116,9 +167,12 @@ public:
 public:
 	void AddNode(config* master , int groupid  , config* slave=NULL ) ;
 	int size() const  ; 
-    int ExcuteCommand( char * data , char ** response , unsigned int(* HASH)(char * ) =NULL ) ;
+    int ExcuteCommand( char * data , char * response , unsigned int(* HASH)(char * ) =NULL ) ;
 private:
     int WakeUp(int msgid  ) ; 
+    int set(  char * key , char * command  ,char *out) ; 
+    int get(  char * key , char * command  ,char *out) ; 
+    void info( char *out ) ; 
 private:
 	p__list_node__ m_p ; 
 	int _size ; 

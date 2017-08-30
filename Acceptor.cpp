@@ -48,24 +48,12 @@ public:
         if (len > 0)
         {
             #if 1
-                printf("read buf:%s" , g_read_buffer ) ; 
-                write(m_handle ,  "$6\r\nfoobar\r\n" ,strlen("$6\r\nfoobar\r\n")) ;
-				CONNECTPOOL::ConnectPool::Instance()->ExcuteCommand( g_read_buffer ,NULL ) ;
-            #endif 
+                //printf("read buf:%s" , g_read_buffer ) ; 
                 
-#if __DEBUG__
-        		//printf("recv data=%s\n" , g_read_buffer ) ;
-                write(m_handle ,  "$6\r\nfoobar\r\n" ,strlen("$6\r\nfoobar\r\n")) ;
-                struct sockaddr_in sa;
-                int len = sizeof(sa);
-                if(!getpeername(m_handle, (struct sockaddr *)&sa,(socklen_t*) &len))
-                {
-
-                }
-
-                printf( "对方IP：%s \n", inet_ntoa(sa.sin_addr));
-                printf( "对方PORT：%d \n", ntohs(sa.sin_port));
-#endif
+                char response[64]={0} ; 
+				CONNECTPOOL::ConnectPool::Instance()->ExcuteCommand( g_read_buffer ,response ) ;
+                write(m_handle , response  ,strlen(response)) ;
+            #endif 
                 REACTOR_MANAGER_INSTANCE.RegistEvent(this, e_READEVENT);
 
         }

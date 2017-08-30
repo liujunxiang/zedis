@@ -24,13 +24,16 @@ using namespace std;
 
 int main() {
 	printf("start service ,pid is %d\n" ,getpid() ) ; 
+    
     CONNECTPOOL::ConnectPool *pool=CONNECTPOOL::ConnectPool::Instance() ;  
 	CONNECTPOOL::config oconfig1( "127.0.0.1" ,7000 ) ;
 	CONNECTPOOL::config oconfig2( "127.0.0.1" ,7001 ) ;
 	CONNECTPOOL::config oconfig3( "127.0.0.1" ,7002 ) ;
 	CONNECTPOOL::config oconfig4( "127.0.0.1" ,7003 ) ;
+    
 	pool->AddNode( &oconfig1 , 1  , &oconfig2) ; 
 	pool->AddNode( &oconfig3 , 2  , &oconfig4) ; 
+    
     #if 1
 	Acceptor oAcceptor( "127.0.0.1" ,3456 ) ;
     while (1)

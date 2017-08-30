@@ -16,8 +16,12 @@
 		__STR__ = NULL ; \
 	}\
 }while(0 ) ;
-
-#define DEBUG_FORMAT "[FILE=%s] [LINE=%d]"
-#define DEBUG_VALIST __FILE__,__LINE__
-
+#define FILE_TRACER
+#if defined(FILE_TRACER) 
+    #define DEBUG_FORMAT "[FILE=%s] [LINE=%d]"
+    #define DEBUG_VALIST __FILE__,__LINE__
+#else
+    #define DEBUG_FORMAT            
+    #define DEBUG_VALIST 
+#endif 
 #endif /* MACRO_H_ */
