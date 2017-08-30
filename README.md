@@ -12,3 +12,5 @@ make clean && make
 ```
 ./proxy host port &
 ```
+## 架构图
+![image](https://github.com/liujunxiang/redis-proxy/blob/master/resource/1.png)
