@@ -17,4 +17,7 @@
 	}\
 }while(0 ) ;
 
+#define DEBUG_FORMAT "[FILE=%s] [LINE=%d]"
+#define DEBUG_VALIST __FILE__,__LINE__
+
 #endif /* MACRO_H_ */
