@@ -1,7 +1,14 @@
 # redis-proxy
-Codis is a proxy based high performance Redis cluster solution written in C++. 
-# usage
-cd ./Debug
-make clean && make 
-./RedisProxy [ host ] [ port ] 
+一个基于redis的代理服务器。支持cluster，同时具有很好的可扩展性
+## 使用方法
 
+---
+
+```
+make clean && make
+```
+
+ 
+```
+./proxy host port &
+```
