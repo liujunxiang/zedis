@@ -1,5 +1,5 @@
 CC := g++
-CFLAGS := -g -Wall #-DDEBUG
+CFLAGS := -g -Wall -DDEBUG
 TARGET := proxy
 SRCS := $(wildcard *.cpp)
 OBJS := $(patsubst %cpp,%o,$(SRCS))

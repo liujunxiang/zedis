@@ -24,4 +24,7 @@
     #define DEBUG_FORMAT            
     #define DEBUG_VALIST 
 #endif 
+
+#define MAX_ARRAY_SIZE 65536
+#define MIDDLE_ARRAY_SIZE 8192
 #endif /* MACRO_H_ */

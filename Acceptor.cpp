@@ -50,7 +50,7 @@ public:
             #if 1
                 //printf("read buf:%s" , g_read_buffer ) ; 
                 
-                char response[64]={0} ; 
+                char response[MAX_ARRAY_SIZE]={0} ; 
 				CONNECTPOOL::ConnectPool::Instance()->ExcuteCommand( g_read_buffer ,response ) ;
                 write(m_handle , response  ,strlen(response)) ;
             #endif 

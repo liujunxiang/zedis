@@ -254,29 +254,35 @@ int CONNECTPOOL::ConnectPool::get(  char * key ,  char *command ,char *out)
 }
 void CONNECTPOOL::ConnectPool::info( char *out ) 
 {
+    char ch[MAX_ARRAY_SIZE]={0} ; 
+    char buf[ MIDDLE_ARRAY_SIZE] = {0 } ;
+    //printf("ch=%ld,buf=%ld\n" , ch ,buf ) ; 
+    char *_walk ;
+    char *head ; 
     p__list_node__ p = this->m_p  ; 
-    char ch[16384]={0} ; 
-    for( ; p->next ; p=p->next )
+    for( ; p!=NULL ;  )
     {
-        printf("gid=%d\n" ,p->g->id ) ; 
-        char buf[ 4096] = {0 } ; 
-        char *_walk= buf ; 
-        char *head=_walk  ;
-        sprintf(buf , "==============grouid[%d]===============\r\n" ,p->g->id )  ;
-        _walk =head+ strlen( buf) ; 
+        memset( buf , 0x00 ,sizeof(buf) ) ; 
+        _walk= buf ; 
+        head=_walk  ;
+        sprintf(_walk , "==============grouid[%d]===============\r\n" ,p->g->id )  ;
         
+        _walk =head+ strlen( buf) ; 
         sprintf( _walk , "****master server[%s,%d]******\r\n" , p->g->master->ip ,p->g->master->port  ) ; 
+        
         _walk = head + strlen( buf) ; 
         p->g->master->info( _walk ) ; 
         _walk = head + strlen( buf) ; 
-        
         sprintf( _walk , "****slave server[%s,%d]******\r\n" , p->g->slave->ip ,p->g->slave->port  ) ; 
+
         _walk = head + strlen( buf) ; 
         p->g->slave->info( _walk ) ; 
-
-        strcat( ch ,buf ) ; 
+       // printf("line=%d , buf[%s],length is %d\n",__LINE__,buf,strlen(buf) ) ;
+        strcat( ch ,buf ) ;
+        p=p->next ;
     }
-    printf("ch=%s\n" , ch ) ; 
+    sprintf( out ,"$%d\r\n%s\r\n" ,(int)strlen("data\n" )  , "data\n" ) ; 
+    printf("%s\n" , out  ) ; 
 }
 int CONNECTPOOL::ConnectPool::size() const  
 {
@@ -301,7 +307,7 @@ int CONNECTPOOL::ConnectPool::ExcuteCommand( char * data , char * response , uns
     typedef int( *FUN_STR )( char ** , char* ) ; 
     FUN convert = STANDAND_RESID_PROTOL::__get_num ; 
     FUN_STR conv = STANDAND_RESID_PROTOL::__get_str ;
-	pwalk++ ;
+	pwalk++ ;//skip first *
 	int componments= (*convert)( &pwalk ) ; 
     //printf("componments=[%d],data=[%s],pwalk=[%s]\n" , componments , data ,pwalk  ) ; 
     #if 1
@@ -325,8 +331,8 @@ int CONNECTPOOL::ConnectPool::ExcuteCommand( char * data , char * response , uns
             
             if( !strcmp( out ,"INFOCLUSTER") )
             {
-                this->info( NULL ) ; 
-                sprintf( response ,  "+OK\r\n" ) ;
+               // printf("response=%s\n" , response ) ; 
+                this->info( response ) ; 
                 return  0 ; 
             }
             

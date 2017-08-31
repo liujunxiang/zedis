@@ -144,7 +144,7 @@ typedef struct __node_group__
 typedef struct __list_node__
 {
 	p_node_group_ g ;
-	__list_node__* next ;
+	struct __list_node__* next ;
 	__list_node__( p_node_group_   _p):g(_p),next(NULL){ }
     ~__list_node__()
     {
