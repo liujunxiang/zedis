@@ -14,3 +14,6 @@ make clean && make
 ```
 ## 架构图
 ![image](https://github.com/liujunxiang/redis-proxy/blob/master/resource/1.png)
+
+## 示例
+![image](https://github.com/liujunxiang/redis-proxy/blob/master/resource/2.png)
