@@ -185,7 +185,8 @@ void CONNECTPOOL::ConnectPool::Release()
 CONNECTPOOL::ConnectPool::ConnectPool():m_p(NULL),\
 _size(0)
 {
-    
+    memset(ref_read , 0 ,sizeof(ref) ) ; 
+    memset(ref_write , 0 ,sizeof(ref) ) ;
 }
 
 CONNECTPOOL::ConnectPool::~ConnectPool()
@@ -214,6 +215,7 @@ void CONNECTPOOL::ConnectPool::AddNode(config* master ,  int groupid  ,  config*
         p->next = _list_node_ ; 
 	}
 	_size++; 
+    
 }
 
 int CONNECTPOOL::ConnectPool::set(  char * key ,  char *command ,char *out) 
@@ -235,6 +237,7 @@ int CONNECTPOOL::ConnectPool::set(  char * key ,  char *command ,char *out)
     {
          sprintf( out ,  "+OK\r\n") ;
     }
+    this_>ref_write[p->g->id]++ ; 
     return  0 ; 
 }
 
@@ -250,6 +253,7 @@ int CONNECTPOOL::ConnectPool::get(  char * key ,  char *command ,char *out)
     for(   walk= 0 ,  p = this->m_p  ; walk<index ; walk++ , p=p->next ) ; 
     
     p->g->active_node()->get( command , out  ) ; 
+    this_>ref_read[p->g->id]++ ;
     return  0 ; 
 }
 void CONNECTPOOL::ConnectPool::info( char *out ) 
@@ -283,6 +287,20 @@ void CONNECTPOOL::ConnectPool::info( char *out )
     }
     sprintf( out ,"$%d\r\n%s\r\n" ,(int)strlen("data\n" )  , "data\n" ) ; 
     printf("%s\n" , out  ) ; 
+}
+void CONNECTPOOL::ConnectPool::view( char *out )
+{
+    p__list_node__ p = this->m_p  ; 
+    char *_p = out ;
+    char *head=p; 
+    sprintf( _p , "*%d\r\n" , this->_size ) ; 
+    _p=head+strlen(head ) ; 
+    for( ; p!=NULL ;  p=p->next)
+    {
+        char tmp[32]={0} ; 
+        memset()
+    }
+     
 }
 int CONNECTPOOL::ConnectPool::size() const  
 {
@@ -329,10 +347,16 @@ int CONNECTPOOL::ConnectPool::ExcuteCommand( char * data , char * response , uns
             }
             
             
-            if( !strcmp( out ,"INFOCLUSTER") )
+            if( !strcmp( out ,"INFOCLUSTER") ||  !strcmp( out ,"infocluster"))
             {
                // printf("response=%s\n" , response ) ; 
                 this->info( response ) ; 
+                return  0 ; 
+            }
+            
+            if( !strcmp( out ,"view")  || !strcmp( out ,"VIEW") )
+            {
+                this->view( response ) ; 
                 return  0 ; 
             }
             

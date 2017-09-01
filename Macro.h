@@ -27,4 +27,5 @@
 
 #define MAX_ARRAY_SIZE 65536
 #define MIDDLE_ARRAY_SIZE 8192
+#define MIN_ARRAY_SIZE 64
 #endif /* MACRO_H_ */

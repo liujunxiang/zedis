@@ -172,10 +172,13 @@ private:
     int WakeUp(int msgid  ) ; 
     int set(  char * key , char * command  ,char *out) ; 
     int get(  char * key , char * command  ,char *out) ; 
+    void view( char *out ) ; 
     void info( char *out ) ; 
 private:
 	p__list_node__ m_p ; 
 	int _size ; 
+    char ref_read[MIN_ARRAY_SIZE] ; 
+    char ref_write[MIN_ARRAY_SIZE] ; 
 };
 }
 
