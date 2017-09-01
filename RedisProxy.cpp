@@ -24,8 +24,8 @@ using namespace std;
 
 int main() {
 	printf("start service ,pid is %d\n" ,getpid() ) ; 
-    
-    CONNECTPOOL::ConnectPool *pool=CONNECTPOOL::ConnectPool::Instance() ;  
+    	REACTOR_MANAGER_INSTANCE ; 
+    	CONNECTPOOL::ConnectPool *pool=CONNECTPOOL::ConnectPool::Instance() ;  
 	CONNECTPOOL::config oconfig1( "127.0.0.1" ,7000 ) ;
 	CONNECTPOOL::config oconfig2( "127.0.0.1" ,7001 ) ;
 	CONNECTPOOL::config oconfig3( "127.0.0.1" ,7002 ) ;
