@@ -26,5 +26,6 @@ public:
      void HandleError() ;
 };
 
+
 END_NAMESPACE
 #endif /* ACCEPTOR_H_ */
