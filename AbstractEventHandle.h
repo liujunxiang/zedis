@@ -22,8 +22,6 @@ public:
     virtual ~AbstractEventHandle() ;
 } ;
 
-
-
 END_NAMESPACE
 
 #endif /* ABSTRACTEVENTHANDLE_H_ */
